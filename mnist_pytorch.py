@@ -1,4 +1,5 @@
 import time
+from collections import defaultdict
 import torch
 import torch.nn as nn
 from torchvision import datasets, transforms
@@ -114,7 +115,7 @@ def train(epochs):
         epoch_loss_avg = loss_val/ len(train_dataloader)
         accuracy = 100 * correct / total
         
-        print(f'Epoch {epoch}/{epochs-1}, Loss: {epoch_loss_avg:.4f},  Accuracy: {accuracy:.2f}%')
+        print(f'Epoch {epoch+1}/{epochs}, Loss: {epoch_loss_avg:.4f},  Accuracy: {accuracy:.2f}%')
     end_time = time.time()
     print(f'Train time: {end_time - start_time:.2f} seconds')
 
@@ -124,11 +125,16 @@ def train(epochs):
 
 if __name__ == "__main__" :
 
-    start = time.time()
-    train(5)
-    end = time.time()
-    print(f'Runtime:')
-    print(f'Total runtime: {end - start:.2f} seconds')
+    train_time_dict = defaultdict(int)
+
+    for i in range(5):
+        start = time.time()
+        train(5)
+        end = time.time()
+        run_time = round(end-start,2)
+        train_time_dict[f'Pytorch train run {i+1}, time in secs'] = run_time
+        print(f'Total runtime: {end - start:.2f} seconds')
+    print(train_time_dict)
 
 
 
