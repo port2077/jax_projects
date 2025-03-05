@@ -7,7 +7,7 @@ The goal is to understand the key differences, performance characteristics, and 
 
 ## Current Focus: MNIST Implementation
 
-### Phase 1: Framework Comparison ( Completed )
+### Phase 1: Framework Comparison
 - Implementing MNIST classification in PyTorch (baseline)
 - Reimplementing the same model architecture in JAX
 - Performance analysis:
@@ -17,7 +17,24 @@ The goal is to understand the key differences, performance characteristics, and 
   - Key learning points about JAX's approach
 
 
+## Future Plans
+
+### Phase 2: Transformer Implementation
+- Planning to implement a small-scale transformer (GPT-1 or GPT-2)
+- will follow the nano-gpt implementation from the Karpathy's nano-gpt repo - https://github.com/karpathy/ng-video-lecture
+- Training on a modest text dataset
+- Goals:
+  - Better understand JAX's handling of more complex architectures
+  - Explore JAX's optimization capabilities
+  - Compare implementation complexity with PyTorch
+
+
+
 ## Updates 
+
+- 05/03/2025
+  - Added a new section on the nano-gpt implementation in JAX. 
+  - encode,decode and batching functions are added to the nano-gpt implementation in JAX. 
 
   - 10/02/2025
     - Optimized the JAX code to use @nnx.jit only to the training step function and not on the data loading and decoding of the batches of data. 
@@ -37,21 +54,6 @@ The goal is to understand the key differences, performance characteristics, and 
     - Added naive implementation of MNIST classification in JAX. 
     - Initial implementation had an unoptimized JAX code with the entire training code in one train loop (direct translation of PyTorch code) with @nnx.jit decorator. 
     - This approach was not optimal as it JIT-compiled operations that shouldn't be compiled (data loading, transforms, and batch processing), resulting in a training time of ~600 seconds - approximately 3x slower than PyTorch's ~175 seconds.
-
-
-## Future Plans
-
-### Phase 2: Transformer Implementation
-- Planning to implement a small-scale transformer (GPT-1 or GPT-2)
-- Training on a modest text dataset
-- Goals:
-  - Better understand JAX's handling of more complex architectures
-  - Explore JAX's optimization capabilities
-  - Compare implementation complexity with PyTorch
-
-
-
-
 
 
 
