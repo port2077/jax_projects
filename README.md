@@ -32,9 +32,12 @@ The goal is to understand the key differences, performance characteristics, and 
 
 ## Updates 
 
-- 05/03/2025
-  - Added a new section on the nano-gpt implementation in JAX. 
-  - encode,decode and batching functions are added to the nano-gpt implementation in JAX. 
+  - 16/03/2025
+    - Added Bigram Language Model implementation in pure JAX. 
+
+  - 05/03/2025
+    - Added a new section on the nano-gpt implementation in JAX. 
+    - encode,decode and batching functions are added to the nano-gpt implementation in JAX. 
 
   - 10/02/2025
     - Optimized the JAX code to use @nnx.jit only to the training step function and not on the data loading and decoding of the batches of data. 
