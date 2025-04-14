@@ -31,6 +31,8 @@ The goal is to understand the key differences, performance characteristics, and 
 
 
 ## Updates 
+  - 13/04/2025
+    - self-attention, multi-head attention, layer norm blocks added to the nano-gpt implementation in JAX. 
 
   - 16/03/2025
     - Added Bigram Language Model implementation in pure JAX. 
