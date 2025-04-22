@@ -1,11 +1,11 @@
 # JAX Learning Project
+( work in progress) 
 
 An exploration into the JAX ecosystem, comparing it with PyTorch through practical implementations. This was mostly sparked by the recent release of the JAX blog from Google:
 https://cloud.google.com/blog/products/ai-machine-learning/guide-to-jax-for-pytorch-developers
 
-The goal is to understand the key differences, performance characteristics, and practical considerations between these frameworks.
 
-## Current Focus: MNIST Implementation
+## Current Focus: Phase 2
 
 ### Phase 1: Framework Comparison
 - Implementing MNIST classification in PyTorch (baseline)
@@ -17,20 +17,33 @@ The goal is to understand the key differences, performance characteristics, and 
   - Key learning points about JAX's approach
 
 
-## Future Plans
 
-### Phase 2: Transformer Implementation
+### Phase 2: Transformer Implementation 
 - Planning to implement a small-scale transformer (GPT-1 or GPT-2)
 - will follow the nano-gpt implementation from the Karpathy's nano-gpt repo - https://github.com/karpathy/ng-video-lecture
-- Training on a modest text dataset
-- Goals:
-  - Better understand JAX's handling of more complex architectures
-  - Explore JAX's optimization capabilities
-  - Compare implementation complexity with PyTorch
 
+### Phase 3: 
+- maybe expand beyond if all these works well. 
 
 
 ## Updates 
+  - 22/04/2025
+    - complete nano-gpt implementation in JAX with training script.
+    - initial results -> currently overfitting at 5000 steps. (needs fixing)
+    ![Training Loss Graph](./nano-gpt/plots/training_loss_20250422_005215.jpg)
+    - training configuration details
+      - Batch size: 16
+      - Block size: 32
+      - Training steps: 5000
+      - Learning rate: 1e-4
+      - Number of attention layers: 1
+      - Embedding size: 64
+      - Number of attention heads: 4
+      - Vocabulary size: 65
+    - Training is executed on GPU using SLURM scheduler (see train.slurm)
+    
+   
+
   - 13/04/2025
     - self-attention, multi-head attention, layer norm blocks added to the nano-gpt implementation in JAX. 
 
