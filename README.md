@@ -27,10 +27,60 @@ https://cloud.google.com/blog/products/ai-machine-learning/guide-to-jax-for-pyto
 
 
 ## Updates 
+  - 12/05/2025
+    - added ful implementation of training code and generated examples. 
+    - fixed the previous overfitting issue and other bugs. 
+    ![Training Loss Graph](./nano-gpt/plots/training_loss_with_6_layers.jpg)
+    - Generated examples:
+      ```
+      OFRCUTOLYCUS:LORD:
+      I wash lie; if I do caTse heart him in excle.
+
+      KING RICHESRY:
+      You hath blood men, I let me with his sea.
+
+      DUKE VINCENTIO:
+      More say, him sight, and him saidst the lean service
+      And which in his subject. O this sock'd he say, hence you enter'd
+      Him and pity cimpassion-in him in him.
+
+      AAUTOLYCUS:
+      You have she but them by other black'd oppears to expless' chavise
+      And and Georgest in place the sovereign
+      Second than partlyso more and more harms: what
+      thou he'll'd they crouds, I'll not
+      ```
+    - training configuration details
+      - Batch size: 32
+      - Block size: 128
+      - Training steps: 5000
+      - Learning rate: 1e-3
+      - Number of transformer layers: 6
+      - Embedding size: 256
+      - Number of attention heads: 8
+      - Vocabulary size: 65
+      - Training logs:
+      ```
+      step: 4991 || train loss: 1.4324970245361328
+      step: 4992 || train loss: 1.4297032356262207
+      step: 4993 || train loss: 1.4638890027999878
+      step: 4994 || train loss: 1.4292161464691162
+      step: 4995 || train loss: 1.4353132247924805
+      step: 4995 || val loss: 1.6609106063842773
+      step: 4996 || train loss: 1.3704359531402588
+      step: 4997 || train loss: 1.4555329084396362
+      step: 4998 || train loss: 1.443408727645874
+      step: 4999 || train loss: 1.5129399299621582
+      step: 5000 || train loss: 1.4183716773986816
+      step: 5000 || val loss: 1.682213544845581
+      ```
+      
+
+
   - 22/04/2025
     - complete nano-gpt implementation in JAX with training script.
     - initial results -> currently overfitting at 5000 steps. (needs fixing)
-    ![Training Loss Graph](./nano-gpt/plots/training_loss_20250422_005215.jpg)
+    <!-- ![Training Loss Graph](./nano-gpt/plots/training_loss_20250422_005215.jpg) -->
     - training configuration details
       - Batch size: 16
       - Block size: 32

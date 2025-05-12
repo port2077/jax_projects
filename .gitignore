@@ -1,3 +1,6 @@
 data/
+nano-gpt/plots/
+nano-gpt/weights/
+nano-gpt/_pycache_/
 *.log
 *.err
