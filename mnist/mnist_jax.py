@@ -64,10 +64,8 @@ class Model(nnx.Module):
             padding= 'SAME'
             )
         #print(f'Tensor shape after maxpool: {x.shape}')
-        ## x = jax.lax.collapse(x,0) this does not work for flattening
         x = x.reshape((x.shape[0],-1))
         x = self.linear1(x)
-        ## jax loss softmax cross entropy handles sigmoid on its own
         # x = nnx.sigmoid(x)
 
         return x
@@ -80,29 +78,15 @@ def jax_collate(batch):
     return tree_map(jnp.asarray,default_collate(batch))
 
 @nnx.jit
-## this is the action taken for a single trainiing step and recommended be  jit complied since 
-## the variables are not known as complilation time
+
 def train_step(model,optimizer,data,target):
-    ## get the grad fx that needs to calculate the gradients
-    ## the jax nnx value_and_grad takes as input a function
-    ## and returns the same function extended 
 
     ## define the loss function which will return the numerical loss value
     def loss_fx(model):
         #print(f'Input tensor shape: {data.shape}')
         output = model(data)
-        #print(f'Output tensor shape: {output.shape} Output: {output}')
-        # predicted = jnp.argmax(output, 1)  # Get the predicted class
-        # total += target.size(0)  # Add batch size
-        # correct += (predicted == target).sum()
-        # get the loss value
-        # add comment for integer label / mean
         loss = optax.softmax_cross_entropy_with_integer_labels(output,target).mean()
         return loss,output
-    ## has_aux (bool) – Optional, bool. 
-    # Indicates whether fun returns a pair where the first element is considered the output 
-    # of the mathematical function to be differentiated and the second element is auxiliary data
-    # since we are returning the output also with loss
 
     grad_fx = nnx.value_and_grad(loss_fx,has_aux=True)
     ## get the numerical gradient values
@@ -178,7 +162,6 @@ def train(epochs):
 
         loss,accuracy,total = train_epoch(model,optimizer,train_dataloader)
 
-        #accuracy = 100 * correct / total
         print(f'Epoch: {epoch+1}/{epochs} Average Loss: {loss} Accuracy: {accuracy/total * 100:.2f}')
         #print(f'Epoch: {epoch}/{5-1}  Accuracy: {accuracy:.2f}%')
     end_time = time.time()

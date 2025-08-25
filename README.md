@@ -1,37 +1,62 @@
 # JAX Learning Project
 ( work in progress) 
 
-An exploration into the JAX ecosystem, comparing it with PyTorch through practical implementations. This was mostly sparked by the recent release of the JAX blog from Google:
-https://cloud.google.com/blog/products/ai-machine-learning/guide-to-jax-for-pytorch-developers
+This repo consists of smaller projects that I am working on in order to learn JAX and its ecosystem. The general struture is that each folder is a self-contained project on it's own but they may be inter connected in some cases.
+
+Currently, this includes:
+
+- optimizers -- Implementaion of the Muon optimizer in Optax. My implementation and understanding follows from these great write ups by the authors/researchers associated with it: [Laker/Newhouse](https://www.lakernewhouse.com/writing/muon-1), [Jeremy Bernstein](https://jeremybernste.in/writing/deriving-muon), and [Keller Jordan](https://kellerjordan.github.io/posts/muon/).
+
+- nano_gpt -- I thought of implementing the character level nano-gpt codebase by Karpathy (see the [video](https://www.youtube.com/watch?v=kCc8FmEb1nY) and the original [PyTorch code](https://github.com/karpathy/ng-video-lecture)) in JAX without using any of its libraries and mostly with jnp arrays. This turned out to be a great way to understand many core philosophies of JAX. Some interesting reads here: [Neel Gupta](https://neel04.github.io/my-website/blog/pytorch_rant/), [Kidger](https://kidger.site/thoughts/torch2jax/)
+
+ - mnist -- A simple CNN on MNIST which compares the same model in PyTorch and JAX, mostly uses higher-level libraries like Flax. 
 
 
-## Current Focus: Phase 2
+## Updates
 
-### Phase 1: Framework Comparison
-- Implementing MNIST classification in PyTorch (baseline)
-- Reimplementing the same model architecture in JAX
-- Performance analysis:
-  - Training time comparison
-  - Memory usage
-  - Code complexity differences
-  - Key learning points about JAX's approach
+### updated the nano-gpt code with muon optimizer
+
+![Training Loss Plot](./nano_gpt/plots/training_loss_with_muon.jpg)
+
+  - Generated examples:
+
+     ```
+    KENwYour AXking:
+    What I wull what I hAP have Even took our hasters'd and miscranger.
+
+    KING ROTHER:
+    Yhat?
+
+    QUEEN Ergrand what I GARENTER:
+    Shall kungue?
+
+    KINGHAM:
+    Ahtletand Kow hearth?
+
+    RICHARD ESTA:
+    OpK:
+    And with thy farmilque,
+    Furself:
+    Thou GoRO:
+    What and their ceatired they bark?
+
+    VINING
+    RETCUS:
+    Whow Chall what ARDTIO:
+    I shall hath form what a I'll Axguing I'll warderses.
+
+    BENTUS:
+    Awaking letting IA:
+    In I
+     ```
 
 
+### nano-gpt train results
 
-### Phase 2: Transformer Implementation 
-- Planning to implement a small-scale transformer (GPT-1 or GPT-2)
-- will follow the nano-gpt implementation from the Karpathy's nano-gpt repo - https://github.com/karpathy/ng-video-lecture
+![Training Loss Plot](./nano_gpt/plots/training_loss_with_adam.jpg)
 
-### Phase 3: 
-- maybe expand beyond if all these works well. 
+  - Generated examples:
 
-
-## Updates 
-  - 12/05/2025
-    - added ful implementation of training code and generated examples. 
-    - fixed the previous overfitting issue and other bugs. 
-    ![Training Loss Graph](./nano-gpt/plots/training_loss_with_6_layers.jpg)
-    - Generated examples:
       ```
       OFRCUTOLYCUS:LORD:
       I wash lie; if I do caTse heart him in excle.
@@ -50,65 +75,9 @@ https://cloud.google.com/blog/products/ai-machine-learning/guide-to-jax-for-pyto
       Second than partlyso more and more harms: what
       thou he'll'd they crouds, I'll not
       ```
-    - training configuration details
-      - Batch size: 32
-      - Block size: 128
-      - Training steps: 5000
-      - Learning rate: 1e-3
-      - Number of transformer layers: 6
-      - Embedding size: 256
-      - Number of attention heads: 8
-      - Vocabulary size: 65
-      - Training logs:
-      ```
-      step: 4991 || train loss: 1.4324970245361328
-      step: 4992 || train loss: 1.4297032356262207
-      step: 4993 || train loss: 1.4638890027999878
-      step: 4994 || train loss: 1.4292161464691162
-      step: 4995 || train loss: 1.4353132247924805
-      step: 4995 || val loss: 1.6609106063842773
-      step: 4996 || train loss: 1.3704359531402588
-      step: 4997 || train loss: 1.4555329084396362
-      step: 4998 || train loss: 1.443408727645874
-      step: 4999 || train loss: 1.5129399299621582
-      step: 5000 || train loss: 1.4183716773986816
-      step: 5000 || val loss: 1.682213544845581
-      ```
-      
 
-
-  - 22/04/2025
-    - complete nano-gpt implementation in JAX with training script.
-    - initial results -> currently overfitting at 5000 steps. (needs fixing)
-    <!-- ![Training Loss Graph](./nano-gpt/plots/training_loss_20250422_005215.jpg) -->
-    - training configuration details
-      - Batch size: 16
-      - Block size: 32
-      - Training steps: 5000
-      - Learning rate: 1e-4
-      - Number of attention layers: 1
-      - Embedding size: 64
-      - Number of attention heads: 4
-      - Vocabulary size: 65
-    - Training is executed on GPU using SLURM scheduler (see train.slurm)
-    
-   
-
-  - 13/04/2025
-    - self-attention, multi-head attention, layer norm blocks added to the nano-gpt implementation in JAX. 
-
-  - 16/03/2025
-    - Added Bigram Language Model implementation in pure JAX. 
-
-  - 05/03/2025
-    - Added a new section on the nano-gpt implementation in JAX. 
-    - encode,decode and batching functions are added to the nano-gpt implementation in JAX. 
-
-  - 10/02/2025
-    - Optimized the JAX code to use @nnx.jit only to the training step function and not on the data loading and decoding of the batches of data. 
-    - A good read about when and how to use the jit complied is - https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html
-    - The optimized JAX implementation completes training in ~87 seconds, which is approximately 2x faster than PyTorch (~175 seconds). This represents a 6x speedup from our initial unoptimized JAX implementation which took ~600 seconds.
-
+### mnist pytorch vs jax code 
+ (on same gpu)
 
       | Run Number | PyTorch (secs) | JAX (secs) |
       |------------|---------------|------------|
@@ -117,11 +86,4 @@ https://cloud.google.com/blog/products/ai-machine-learning/guide-to-jax-for-pyto
       | Run 3      | 170.58        | 87.85      |
       | Run 4      | 171.14        | 87.11      |
       | Run 5      | 169.91        | 87.39  
-
-  - 09/02/2025
-    - Added naive implementation of MNIST classification in JAX. 
-    - Initial implementation had an unoptimized JAX code with the entire training code in one train loop (direct translation of PyTorch code) with @nnx.jit decorator. 
-    - This approach was not optimal as it JIT-compiled operations that shouldn't be compiled (data loading, transforms, and batch processing), resulting in a training time of ~600 seconds - approximately 3x slower than PyTorch's ~175 seconds.
-
-
 

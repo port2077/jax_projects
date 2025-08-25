@@ -47,7 +47,6 @@ class Model(nn.Module):
 
         x = self.conv1(x)
         x =self.relu(x)
-        # x = self.dropout(x) # makes performance absolutely worse
         x = self.relu(self.conv2(x))
         x = self.dropout(x)
         x = self.relu(self.conv3(x))
@@ -55,8 +54,8 @@ class Model(nn.Module):
         x = self.maxpool(x)
         
         x = x.flatten(1)
-        #x = self.dropout(x)  this does not work - acc - 9%
-        # decreasing the nn model filter structure from 32-64-128 to 8-16-32 improved performance to a great degree
+        #x = self.dropout(x)  t
+        
 
         x = self.linear1(x)
         # x = self.relu(self.linear1(x))
