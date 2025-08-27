@@ -5,7 +5,7 @@ This repo consists of smaller projects that I am working on in order to learn JA
 
 Currently, this includes:
 
-- optimizers -- Implementaion of the Muon optimizer in Optax. My implementation and understanding follows from these great write ups by the authors/researchers associated with it: [Laker/Newhouse](https://www.lakernewhouse.com/writing/muon-1), [Jeremy Bernstein](https://jeremybernste.in/writing/deriving-muon), and [Keller Jordan](https://kellerjordan.github.io/posts/muon/).
+- optimizers -- Implementaion of the Muon optimizer in Optax. My implementation and understanding follows from these great write ups by the authors/researchers associated with it: [Laker Newhouse](https://www.lakernewhouse.com/writing/muon-1), [Jeremy Bernstein](https://jeremybernste.in/writing/deriving-muon), and [Keller Jordan](https://kellerjordan.github.io/posts/muon/).
 
 - nano_gpt -- I thought of implementing the character level nano-gpt codebase by Karpathy (see the [video](https://www.youtube.com/watch?v=kCc8FmEb1nY) and the original [PyTorch code](https://github.com/karpathy/ng-video-lecture)) in JAX without using any of its libraries and mostly with jnp arrays. This turned out to be a great way to understand many core philosophies of JAX. Some interesting reads here: [Neel Gupta](https://neel04.github.io/my-website/blog/pytorch_rant/), [Kidger](https://kidger.site/thoughts/torch2jax/)
 
@@ -16,42 +16,34 @@ Currently, this includes:
 
 ### updated the nano-gpt code with muon optimizer
 
+Adam - lr: 2e-3
+ Muon - lr: 2e-3, polynomial: quintic, beta: 0.95
+
 ![Training Loss Plot](./nano_gpt/plots/training_loss_with_muon.jpg)
 
   - Generated examples:
 
      ```
-    KENwYour AXking:
-    What I wull what I hAP have Even took our hasters'd and miscranger.
+    AMPSON:
+    The senators, father more, stay may than may to good sap my trumpets of heart
+    than that undoved that your loves wrongs a gless
+    runns of a gommort-chreation and little duke's toon
+    quarrel me, my nurse sounds a never not must: but
+    He's wish senself to be so; and receive.
+    If I know!
 
-    KING ROTHER:
-    Yhat?
-
-    QUEEN Ergrand what I GARENTER:
-    Shall kungue?
-
-    KINGHAM:
-    Ahtletand Kow hearth?
-
-    RICHARD ESTA:
-    OpK:
-    And with thy farmilque,
-    Furself:
-    Thou GoRO:
-    What and their ceatired they bark?
-
-    VINING
-    RETCUS:
-    Whow Chall what ARDTIO:
-    I shall hath form what a I'll Axguing I'll warderses.
-
-    BENTUS:
-    Awaking letting IA:
-    In I
+    SICINUS:
+    I would not spoke my lord,
+    I sold blood that love comprest not my name;
+    And my convey with a much sensely tongue
+    When sister more either greats my father death,
+    When rue moved thankful envirate more ad
      ```
 
 
 ### nano-gpt train results
+
+Adam - lr: 2e-3
 
 ![Training Loss Plot](./nano_gpt/plots/training_loss_with_adam.jpg)
 

@@ -402,7 +402,7 @@ def train(steps=100,adamw_lr=1e-3,muon_lr=2e-3):
     steps_list = []
     # multi_transform enables to partition the optimizer updated with labels
     optimizer = multi_transform(
-                   {'adam': adamw(adamw_lr), 'muon': muon(muon_lr,polynomial='quintic')}, params_label)
+                   {'adam': adamw(adamw_lr), 'muon': muon(muon_lr,polynomial='cursed_quintic')}, params_label)
     # optimizer = adamw(learning_rate=adamw_lr)
     optimizer_state = optimizer.init(params)
 
@@ -427,7 +427,7 @@ def train(steps=100,adamw_lr=1e-3,muon_lr=2e-3):
     
     try: 
         print('saving the model weights as jnp arrays')
-        jnp.savez(f'weights/gpt_quintic',**params)
+        jnp.savez(f'weights/gpt_cursed_quintic',**params)
     except Exception as e:
         print('error in model saving weight',e)
         
@@ -437,8 +437,8 @@ def train(steps=100,adamw_lr=1e-3,muon_lr=2e-3):
         train_losses=train_losses,
         val_losses=val_losses,
         eval_interval=eval_interval,
-        plot_path='plots/training_loss_with_quintic.jpg',
-        log_path='logs/loss_data_with_quintic.json'
+        plot_path='plots/training_loss_with_cursed_quintic.jpg',
+        log_path='logs/loss_data_with_cursed_quintic.json'
     )
 
 
@@ -458,12 +458,12 @@ if __name__ == '__main__' :
     else:
         print(f'generate from trained weights',flush=True)
         processor = Processor()
-        model_file_path = 'weights/gpt_muon.npz'
+        model_file_path = 'weights/gpt_cursed_quintic.npz'
         params = load_model_params(model_file_path)
         
         generated_text = processor.generate_text_from_transfomer(params, transformer,
                                                                     num_tokens_to_generate=500, 
-                                                                    number_of_layers=4)
+                                                                    number_of_layers=6)
         print("\n--- Generated Text ---")
         print(generated_text)
         
