@@ -8,9 +8,9 @@ from optax._src import combine
 
 class MuonUpdateState(NamedTuple):
 
-    momentum: base.Params
+    momentum: base.Updates
 
-def scale_by_muon(beta: float=0.95, steps: int=5,
+def scale_by_muon(beta: float=0.95, steps: int=5, nesterov: bool = True,
                   polynomial: Literal['cubic','quintic','cursed_quintic'] = 'cubic') -> base.GradientTransformation:
 
     def newton_schulz(G: jax.Array, steps: int, 
@@ -31,41 +31,47 @@ def scale_by_muon(beta: float=0.95, steps: int=5,
     
     def cubic_polynomial(X: jax.Array,steps: int)-> jax.Array :
         a,b = (3/2,-1/2)
-        for _ in range(steps):
-            A = jnp.matmul(X,X.T)
-            X = a * X + b * jnp.matmul(A,X)
+        def step(x,_):
+            A = jnp.matmul(x,x.T)
+            x = a * x + b * jnp.matmul(A,x)
+            return x, None
+        X,_ = jax.lax.scan(step,init=X,length=steps)
         return X
     
     def quintic_polynomial(X: jax.Array,steps: int,cursed: bool = False)-> jax.Array :
         a,b,c = (3.445,-4.7750,2.0315) if cursed else (3,-16/5,6/5)
-        for _ in range(steps):
-            A = jnp.matmul(X,X.T)
+        def step(x,_):
+            A = jnp.matmul(x,x.T)
             B = jnp.matmul(A,A)
-            X = a * X + b * jnp.matmul(A,X) + c * jnp.matmul(B,X)
+            x = a * x + b * jnp.matmul(A,x) + c * jnp.matmul(B,x)
+            return x, None
+        X,_ = jax.lax.scan(step,init=X,length=steps)
         return X
 
 
-    def init_fn(params):
+    def init_fn(params: base.Updates):
         momentum = jax.tree.map(jnp.zeros_like,params)
-        return MuonUpdateState(momentum)
+        return MuonUpdateState(momentum=momentum)
 
     def update_fn(grad: base.Updates, state: MuonUpdateState, params):
-        momentum = jax.tree.map(lambda m,g: beta * m + (1-beta)* g, grad, state.momentum)
-        update = jax.tree.map(lambda m: newton_schulz(m,steps,polynomial),momentum)
+        momentum = jax.tree.map(lambda m,g: beta * m + (1-beta)*g,state.momentum,grad)
+        update = jax.tree.map(lambda m,g: beta * m + (1-beta)*g,momentum,grad) if nesterov else momentum 
+        update = jax.tree.map(lambda m: newton_schulz(m,steps,polynomial),update)
         update = jax.tree.map(lambda x: x * (x.shape[-2]/x.shape[-1])**0.5, update)
 
-        return update, MuonUpdateState(momentum)
+        return update, MuonUpdateState(momentum=momentum)
     
     return base.GradientTransformation(init_fn, update_fn)
 
 
 def muon(lr: base.ScalarOrSchedule, beta: float=0.95, steps: int=5,
-         polynomial: Literal['cubic','quintic','cursed_quintic'] = 'cubic') -> base.GradientTransformation:
+         polynomial: Literal['cubic','quintic','cursed_quintic'] = 'cubic', nesterov: bool= True) -> base.GradientTransformation:
     return combine.chain(
         scale_by_muon(
             beta = beta,
             steps= steps,
             polynomial=polynomial,
+            nesterov=nesterov
         ),
         transform.scale_by_learning_rate(lr),
     )

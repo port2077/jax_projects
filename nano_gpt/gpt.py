@@ -372,13 +372,13 @@ def val_step(
 # train the model, log train/val loss and save the model weights
 def train(steps=100,adamw_lr=1e-3,muon_lr=2e-3):
 
-    batch_size = 32
-    block_size = 128
+    batch_size = 64
+    block_size = 256
     max_iters = steps
     eval_interval = 5
     adamw_lr = adamw_lr
     muon_lr = muon_lr
-    embed_size = 256
+    embed_size = 384
     number_of_heads = 8
     vocab_size = 65
     number_of_layers = 6
@@ -402,8 +402,8 @@ def train(steps=100,adamw_lr=1e-3,muon_lr=2e-3):
     steps_list = []
     # multi_transform enables to partition the optimizer updated with labels
     optimizer = multi_transform(
-                   {'adam': adamw(adamw_lr), 'muon': muon(muon_lr,polynomial='cubic')}, params_label)
-    #optimizer = adamw(learning_rate=adam_lr)
+                   {'adam': adamw(adamw_lr), 'muon': muon(muon_lr,polynomial='quintic')}, params_label)
+    # optimizer = adamw(learning_rate=adamw_lr)
     optimizer_state = optimizer.init(params)
 
     train_key = jax.random.key(42)
@@ -427,7 +427,7 @@ def train(steps=100,adamw_lr=1e-3,muon_lr=2e-3):
     
     try: 
         print('saving the model weights as jnp arrays')
-        jnp.savez(f'weights/gpt_muon',**params)
+        jnp.savez(f'weights/gpt_quintic',**params)
     except Exception as e:
         print('error in model saving weight',e)
         
@@ -437,8 +437,8 @@ def train(steps=100,adamw_lr=1e-3,muon_lr=2e-3):
         train_losses=train_losses,
         val_losses=val_losses,
         eval_interval=eval_interval,
-        plot_path='plots/training_loss_with_muon.jpg',
-        log_path='logs/loss_data_with_muon.json'
+        plot_path='plots/training_loss_with_quintic.jpg',
+        log_path='logs/loss_data_with_quintic.json'
     )
 
 
@@ -447,8 +447,8 @@ if __name__ == '__main__' :
     args = argparse.ArgumentParser()
     args.add_argument('--mode',  type=str,default='train', help='if train starts the training loop else generates text from a trained model')
     args.add_argument('--steps', type=int, default=100, help='number of training steps')
-    args.add_argument('--adamw_lr', type=float, default=1e-3, help='adamw learning rate')
-    args.add_argument('--muon_lr', type=float, default=2e-2, help='muon learning rate')
+    args.add_argument('--adamw_lr', type=float, default=2e-3, help='adamw learning rate')
+    args.add_argument('--muon_lr', type=float, default=2e-3, help='muon learning rate')
     args = args.parse_args()
 
     if args.mode == 'train' :
